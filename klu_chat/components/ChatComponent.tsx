@@ -3,7 +3,7 @@ import ChatMessages from "./ChatMessages";
 
 const ChatComponent: React.FC = () => {
   const messages = [
-    "Hello, check out this link: https://www.example.com",
+    "Hello, check this the out this link: https://www.example.com",
     "Have you seen this: https://www.example.org?",
     "Here's a message without a link.",
   ];
