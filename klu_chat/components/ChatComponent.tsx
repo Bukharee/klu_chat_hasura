@@ -1,5 +1,6 @@
 import React from "react";
 import ChatMessages from "./ChatMessages";
+
 const ChatComponent: React.FC = () => {
   const messages = [
     "Hello, check out this link: https://www.example.com",
@@ -9,11 +10,7 @@ const ChatComponent: React.FC = () => {
 
   return (
     <div className="flex flex-col h-screen p-4">
-      <div className="flex-grow overflow-y-auto">
-        {messages.map((message, index) => (
-          <ChatMessages key={index} message={message} />
-        ))}
-      </div>
+      <ChatMessages messages={messages} />
       {/* Render the input and button for sending messages */}
     </div>
   );
