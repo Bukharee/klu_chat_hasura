@@ -4,16 +4,4 @@ metadata_directory: metadata
 actions:
   kind: synchronous
   handler_webhook_baseurl: http://localhost:3000
-tables:
-  - table: messages
-    schema: public
-    columns:
-      - name: id
-        type: uuid
-        primary_key: true
-        default: "gen_random_uuid()"
-      - name: timestamp
-        type: timestamp
-        default: now()
-      - name: content
-        type: text
+
