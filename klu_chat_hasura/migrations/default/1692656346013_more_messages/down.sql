@@ -1,0 +1,8 @@
+-- Could not auto-generate a down migration.
+-- Please write an appropriate down migration for the SQL below:
+-- INSERT INTO public.messages (content)
+-- VALUES ('Hello, this is second message.');
+-- INSERT INTO public.messages (content)
+-- VALUES ('Hello, this is third message.');
+-- INSERT INTO public.messages (content)
+-- VALUES ('Hello, this is a link: https://github.com/');

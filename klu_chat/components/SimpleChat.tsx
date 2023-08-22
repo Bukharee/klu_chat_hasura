@@ -1,27 +1,79 @@
+// SimpleChat.tsx
+
 import React, { useState } from "react";
-
-// Importing the ChatInput and ChatMessages components
 import ChatInput from "./ChatInput";
-import ChatMessages from "./ChatMessages";
 
-const SimpleChat: React.FC = () => {
-  // State for storing sent messages
-  const [messages, setMessages] = useState<string[]>([]);
+interface Message {
+  id: string;
+  timestamp: string;
+  content: string;
+}
 
-  // Function to handle sending messages
-  const handleSendMessage = (message: string) => {
-    if (message.trim() !== "") {
-      // Adding the new message to the messages array
-      setMessages([...messages, message]);
+interface SimpleChatProps {
+  messages: Message[];
+}
+
+const SimpleChat: React.FC<SimpleChatProps> = ({ messages }) => {
+  const [messageList, setMessageList] = useState<Message[]>(messages);
+
+  const handleSendMessage = async (messageContent: string) => {
+    if (messageContent.trim() !== "") {
+      const newMessage: Message = {
+        id: "temp-id", // Generate a temporary id here or get it from the server
+        timestamp: new Date().toISOString(), // Get the current timestamp
+        content: messageContent,
+      };
+
+      // Update local state immediately to show the new message
+      setMessageList([...messageList, newMessage]);
+
+      try {
+        const response = await fetch(
+          process.env.NEXT_PUBLIC_HASURA_PROJECT_ENDPOINT as string,
+          {
+            method: "POST",
+            headers: {
+              "x-hasura-admin-secret": process.env
+                .HASURA_ADMIN_SECRET as string,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              query: `mutation ($content: String!) {
+                insert_messages_one(object: {content: $content}) {
+                  id
+                  timestamp
+                  content
+                }
+              }`,
+              variables: {
+                content: messageContent,
+              },
+            }),
+          }
+        );
+
+        const result = await response.json();
+        console.log("Insert result: ", result);
+        const insertedMessage: Message = result.data.insert_messages_one;
+
+        // Replace the temporary id with the actual id received from the server
+        newMessage.id = insertedMessage.id;
+        setMessageList([...messageList, newMessage]);
+      } catch (e) {
+        console.log(e);
+      }
     }
   };
 
   return (
     <div className="flex flex-col h-screen p-4">
-      {/* Displaying the chat messages */}
-      <ChatMessages messages={messages} />
-
-      {/* Sending new messages */}
+      <div className="flex-grow overflow-y-auto">
+        {messageList.map((message, index) => (
+          <div key={message.id} className="bg-gray-100 p-2 rounded-md mb-2">
+            {message.content}
+          </div>
+        ))}
+      </div>
       <ChatInput onSendMessage={handleSendMessage} />
     </div>
   );
