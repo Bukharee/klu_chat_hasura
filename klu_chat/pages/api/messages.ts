@@ -4,6 +4,7 @@ export type Message = {
   content: string;
 };
 
+// Function to fetch messages
 export const fetchMessages = async () => {
   try {
     const response = await fetch(
@@ -35,6 +36,7 @@ export const fetchMessages = async () => {
   }
 };
 
+// Function to insert a new message
 export const insertMessage = async (content: string) => {
   try {
     const response = await fetch(
@@ -70,6 +72,7 @@ export const insertMessage = async (content: string) => {
   }
 };
 
+// Function to delete a message by its ID
 export const deleteMessage = async (id: string) => {
   try {
     const response = await fetch(

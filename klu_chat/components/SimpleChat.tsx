@@ -9,9 +9,11 @@ interface SimpleChatProps {
   onDeleteMessage: (messageId: string) => void;
 }
 
+// Function to render messages with links
 const renderMessageWithLinks = (content: string) => {
   const urlRegex = /(https?:\/\/[^\s]+)/g;
   return content.replace(urlRegex, (url) => {
+    // Wrap URLs in <a> tags with styling class
     return `<a href="${url}" class="${styles.link}" target="_blank" rel="noopener noreferrer">${url}</a>`;
   });
 };
@@ -22,10 +24,11 @@ const SimpleChat: React.FC<SimpleChatProps> = ({
 }) => {
   const bottomRef = useRef(null);
 
+  // Scroll to bottom when messages change
   useEffect(() => {
-    // 👇️ scroll to bottom every time messages change
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
   return (
     <div className="flex-grow overflow-y-auto h-56">
       {messages.map((message) => (
@@ -33,24 +36,29 @@ const SimpleChat: React.FC<SimpleChatProps> = ({
           key={message.id}
           className="bg-[#ecedef] p-4 pb-1 rounded-md mb-2 text-black max-w-xl mx-auto"
         >
+          {/* Render message content with links */}
           <div
             dangerouslySetInnerHTML={{
               __html: renderMessageWithLinks(message.content),
             }}
           />
+          {/* Display LinkPreview component for URLs */}
           {message.content.includes("http") && (
             <a href={message.content} className="">
               <LinkPreview url={message.content} />
             </a>
           )}
           <div className="flex items-center justify-between">
+            {/* Display message timestamp */}
             <span className="text-xs text-gray-600">
               {message.timestamp.toLocaleString()}
             </span>
+            {/* Delete button */}
             <button
               onClick={() => onDeleteMessage(message.id)}
               className="ml-2 text-white px-2 py-1 rounded w-5"
             >
+              {/* Delete icon */}
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="black"
@@ -59,6 +67,7 @@ const SimpleChat: React.FC<SimpleChatProps> = ({
                 stroke="currentColor"
                 className="w-4 h-4"
               >
+                {/* Delete icon path */}
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -70,6 +79,7 @@ const SimpleChat: React.FC<SimpleChatProps> = ({
         </div>
       ))}
 
+      {/* Empty div used for scrolling to bottom */}
       <div ref={bottomRef} className="h-11" />
     </div>
   );
