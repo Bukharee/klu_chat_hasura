@@ -28,6 +28,7 @@ const SimpleChat: React.FC<SimpleChatProps> = ({ messages }) => {
       setMessageList([...messageList, newMessage]);
 
       try {
+        console.log("secret", process.env.HASURA_ADMIN_SECRET);
         const response = await fetch(
           process.env.NEXT_PUBLIC_HASURA_PROJECT_ENDPOINT as string,
           {
@@ -35,7 +36,7 @@ const SimpleChat: React.FC<SimpleChatProps> = ({ messages }) => {
             headers: {
               "x-hasura-admin-secret": process.env
                 .HASURA_ADMIN_SECRET as string,
-              "Content-Type": "application/json",
+              "Content-Type": "application/json", // Add this header
             },
             body: JSON.stringify({
               query: `mutation ($content: String!) {
@@ -60,18 +61,30 @@ const SimpleChat: React.FC<SimpleChatProps> = ({ messages }) => {
         newMessage.id = insertedMessage.id;
         setMessageList([...messageList, newMessage]);
       } catch (e) {
+        console.log("errors: ", process.env.HASURA_ADMIN_SECRET);
         console.log(e);
       }
     }
   };
 
+  const renderMessageWithLinks = (content: string) => {
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    return content.replace(urlRegex, (url) => {
+      return `<a href="${url}" target="_blank" rel="noopener noreferrer">${url}</a>`;
+    });
+  };
+
   return (
     <div className="flex flex-col h-screen p-4">
       <div className="flex-grow overflow-y-auto">
-        {messageList.map((message, index) => (
-          <div key={message.id} className="bg-gray-100 p-2 rounded-md mb-2">
-            {message.content}
-          </div>
+        {messageList.map((message) => (
+          <div
+            key={message.id}
+            className="bg-gray-100 p-2 rounded-md mb-2"
+            dangerouslySetInnerHTML={{
+              __html: renderMessageWithLinks(message.content),
+            }}
+          />
         ))}
       </div>
       <ChatInput onSendMessage={handleSendMessage} />
