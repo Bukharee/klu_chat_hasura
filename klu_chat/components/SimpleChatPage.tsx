@@ -33,7 +33,7 @@ const SimpleChatPage: React.FC<SimpleChatPageProps> = ({ messages }) => {
   };
 
   return (
-    <div className="flex flex-col h-screen p-4">
+    <div className="flex flex-col h-[90vh] p-4">
       <SimpleChat
         messages={messageList}
         onDeleteMessage={handleDeleteMessage}
