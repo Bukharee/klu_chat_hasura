@@ -49,9 +49,12 @@ const ChatPage: React.FC = ({
   messages,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   return (
-    <div>
-      <h1>My Only Chat Page</h1>
-      <SimpleChat messages={messages}/>
+    <div className="px-4 py-5 h-5/6">
+      <header className="sticky top-2 bg-white">
+        <h1 className="font-bolder text-4xl pl-4">KluChat</h1>
+        <hr />
+      </header>
+      <SimpleChat messages={messages} />
     </div>
   );
 };
