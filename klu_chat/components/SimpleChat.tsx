@@ -39,7 +39,7 @@ const SimpleChat: React.FC<SimpleChatProps> = ({
             }}
           />
           {message.content.includes("http") && (
-            <a href="">
+            <a href={message.content} className="">
               <LinkPreview url={message.content} />
             </a>
           )}

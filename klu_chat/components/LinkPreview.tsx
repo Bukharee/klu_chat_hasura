@@ -6,6 +6,13 @@ interface LinkPreviewProps {
   url: string;
 }
 
+function truncateText(text: string | undefined, maxLength: number): string {
+  if (text && text.length > maxLength) {
+    return text.substring(0, maxLength);
+  }
+  return text || ""; // Return an empty string if text is undefined
+}
+
 const LinkPreview: React.FC<LinkPreviewProps> = ({ url }) => {
   const [linkData, setLinkData] = useState<any>({});
 
@@ -35,8 +42,8 @@ const LinkPreview: React.FC<LinkPreviewProps> = ({ url }) => {
 
   return (
     <div className="link-preview">
-      <h2>{linkData.title}</h2>
-      <p>{linkData.description}</p>
+      <h2 className="font-bold text-3xl">{truncateText(linkData.title, 50)}</h2>
+      <p>{truncateText(linkData.description, 80)}...</p>
       <img src={linkData.image} alt="Preview" />
       <p>{linkData.url}</p>
     </div>
