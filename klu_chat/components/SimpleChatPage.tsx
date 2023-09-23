@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import SimpleChat from "./SimpleChat"; // Import the SimpleChat component
+import SimpleChat from "./SingleMessage";
 import ChatInput from "./ChatInput"; // Import the ChatInput component
 import { Message, insertMessage, deleteMessage } from "../pages/api/messages"; // Import message-related functions
 
